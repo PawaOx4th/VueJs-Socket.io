@@ -1,7 +1,8 @@
 <template>
   <div id="chat-component">
     <h2>chat-component</h2>
-    <input type="text" v-model="msg" @keydown.enter="sendMessage" />
+    <b-form-input type="text" v-model="msg" size='md' :trim='trimstatus' placeholder="enter your message"></b-form-input>
+
     <button @click="sendMessage">Send Message</button>
   </div>
 </template>
@@ -11,7 +12,8 @@ export default {
   name: "chat-component",
   data() {
     return {
-      msg: ""
+      msg: "",
+      trimstatus: true
     };
   },
   methods: {
