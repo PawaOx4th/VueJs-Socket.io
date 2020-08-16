@@ -1,9 +1,22 @@
 <template>
   <div id="chat-component">
     <h2>chat-component</h2>
-    <b-form-input type="text" v-model="msg" size='md' :trim='trimstatus' placeholder="enter your message"></b-form-input>
 
-    <button @click="sendMessage">Send Message</button>
+    <div class="p-3">
+      <b-form-input
+        class="w-25 mr-3 d-inline-block"
+        type="text"
+        v-model="msg"
+        size="md"
+        :trim="trimstatus"
+        debounce="10"
+        @keydown.enter="sendMessage"
+        placeholder="enter your message"
+      >
+      </b-form-input>
+
+      <b-button variant="primary" @click="sendMessage" size="md">Send Message</b-button>
+    </div>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>Chatroom</h1>
+    <h1 class="display-1"><strong>Chatroom</strong></h1>
     <p><strong>Username</strong> : {{ username }}</p>
     <p><strong>Online</strong> : {{ users.length }}</p>
     <hr />
@@ -17,14 +17,12 @@
   </div>
 </template>
 <script>
-import io from "socket.io-client";
-
 export default {
   name: "app",
   data() {
     return {
-      username: "",
-      socket: io("http://localhost:4000"),
+      username: this.$store.getters.getUsername,
+      socket: this.$store.getters.getSocket,
       messages: [],
       users: []
     };
@@ -35,16 +33,23 @@ export default {
   mounted() {
     this.username = prompt(`What is your username ?`, `Anonymous`);
 
-    // eslint-disable-next-line no-unused-expressions
-    !this.username ? (this.username = "Anonymous") : "";
+    if (!this.username) {
+      this.username = "Anonymous";
+    }
+
+    this.$store.dispatch("setUsername", this.username);
 
     this.joinServer();
   },
   methods: {
     joinServer() {
       this.socket.on("loggedIn", data => {
-        this.messages = data.messages;
-        this.users = data.users;
+        this.$store.dispatch("setMessage", data.messages);
+        //   this.messages = data.messages;
+
+        this.$store.dispatch("setUser", data.users);
+        //   this.users = data.users;
+
         this.socket.emit("newuser", this.username);
       });
 
@@ -65,7 +70,7 @@ export default {
     },
     sendMessage(messageChat) {
       this.socket.emit("msg", messageChat);
-      
+
       console.log(`Send Mag Finish`);
     }
   }
@@ -74,7 +79,7 @@ export default {
 
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Montserrat", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   //   text-align: center;
